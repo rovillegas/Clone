@@ -1,0 +1,217 @@
+
+<mat-tab-group >
+  <mat-tab label="Dashboard">
+      <adf-toolbar>
+
+          <div class="adf-toolbar--spacer"></div>
+          <button
+            mat-raised-button color="primary"
+            title=""
+            (click)="reload()"
+            matTooltip="reload">
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </adf-toolbar>
+
+      <div style="width: 60%;position: relative;float: left;">
+
+        <mat-grid-list cols="5" rowHeight="2.6:1">
+              <mat-grid-tile>
+
+              </mat-grid-tile>
+              <mat-grid-tile>
+
+              </mat-grid-tile>
+              <mat-grid-tile>
+
+              </mat-grid-tile>
+              <mat-grid-tile>
+
+              </mat-grid-tile>
+              <mat-grid-tile>
+
+              </mat-grid-tile>
+              <mat-grid-tile>
+                  <div class="green-button-row">
+                      <button mat-fab ></button>
+                    </div>
+              </mat-grid-tile>
+              <mat-grid-tile>
+                  Current Status
+              </mat-grid-tile>
+              <mat-grid-tile>
+                  <input matInput [matDatepicker]="beginpicker" placeholder="begin">
+                  <mat-datepicker-toggle matSuffix [for]="beginpicker"></mat-datepicker-toggle>
+                  <mat-datepicker #beginpicker></mat-datepicker>
+              </mat-grid-tile>
+              <mat-grid-tile>
+                  <input matInput [matDatepicker]="endpicker" placeholder="end">
+                  <mat-datepicker-toggle matSuffix [for]="endpicker"></mat-datepicker-toggle>
+                  <mat-datepicker #endpicker></mat-datepicker>
+              </mat-grid-tile>
+              <mat-grid-tile>
+
+              </mat-grid-tile>
+              <mat-grid-tile>
+
+              </mat-grid-tile>
+              <mat-grid-tile>
+                Open incidents
+              </mat-grid-tile>
+              <mat-grid-tile>
+                People Injured
+
+              </mat-grid-tile>
+              <mat-grid-tile>
+                People waiting
+
+              </mat-grid-tile>
+              <mat-grid-tile>
+                Exception
+
+              </mat-grid-tile>
+              <mat-grid-tile>
+
+              </mat-grid-tile>
+              <mat-grid-tile>
+                <button type="button" class="mat-raised-button" disabled="true"
+                style="color: #ffffff;background-color:#337ab7;">
+                  0
+                </button>
+              </mat-grid-tile>
+              <mat-grid-tile>
+                  <button type="button" class="mat-raised-button" disabled="true"
+                  style="color: #ffffff;background-color:#337ab7;">
+                   0
+                  </button>
+              </mat-grid-tile>
+              <mat-grid-tile>
+                  <button type="button" class="mat-raised-button" disabled="true"
+                  style="color: #ffffff;background-color:#337ab7;">
+                   0
+                  </button>
+              </mat-grid-tile>
+              <mat-grid-tile>
+                  <button type="button" class="mat-raised-button" disabled="true"
+                  style="color: #ffffff;background-color:#337ab7;">
+                   0
+                  </button>
+              </mat-grid-tile>
+              <mat-grid-tile>
+
+              </mat-grid-tile>
+              <mat-grid-tile>
+
+              </mat-grid-tile>
+              <mat-grid-tile>
+
+              </mat-grid-tile>
+              <mat-grid-tile>
+
+              </mat-grid-tile>
+              <mat-grid-tile>
+
+              </mat-grid-tile>
+
+            </mat-grid-list>
+      </div>
+          <div style="width: 40%; ;position: relative;float: left;">
+              <div style="height: 100%" class="gmap_canvas">
+                  <iframe frameborder="0" height="100%" id="gmap_canvas" marginheight="0" marginwidth="0" scrolling="no" width="100%" src="https://maps.google.com/maps?q=51.522333%2C-0.716167&amp;t=&amp;z=13&amp;ie=UTF8&amp;iwloc=&amp;output=embed">
+                  </iframe>
+                </div>
+
+      </div>
+      <div style="width: 100%;position: relative;float: left;" class="example-container mat-elevation-z8">
+          <mat-table #table [dataSource]="dataSource">
+
+
+            <!-- Id Column -->
+            <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+            </ng-container>
+
+            <!-- Started By Column -->
+            <ng-container matColumnDef="startedBy">
+              <mat-header-cell *matHeaderCellDef> Started By </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.startedBy.firstName}} {{element.startedBy.lastName}} </mat-cell>
+            </ng-container>
+
+            <!-- Started At Column -->
+            <ng-container matColumnDef="startedAt">
+              <mat-header-cell *matHeaderCellDef> Started At </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.started | date:'medium'}} </mat-cell>
+            </ng-container>
+
+
+            <!-- Diagram Column -->
+            <ng-container matColumnDef="diagram">
+              <mat-header-cell *matHeaderCellDef> Diagram </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <button type="button" class="mat-raised-button" (click)="openDiagram(element.id)"
+                        style="color: #ffffff;background-color:#337ab7;">diagram</button>
+              </mat-cell>
+            </ng-container>
+
+            <!-- Expanded Content Column - The detail row is made up of this one column -->
+            <ng-container matColumnDef="expandedDetail">
+              <mat-cell *matCellDef="let detail">
+                <active-tasks-admin [processId]="detail.element.id" style="width: 100%"></active-tasks-admin>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"
+                     matRipple
+                     class="element-row"
+                     [class.expanded]="expandedElement == row"
+                     (click)="expandedElement = row"></mat-row>
+            <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow"
+                     [@detailExpand]="row.element == expandedElement ? 'expanded' : 'collapsed'"
+                     style="overflow: hidden">
+            </mat-row>
+          </mat-table>
+        </div>
+  </mat-tab>
+  <mat-tab label="Trends">
+      <adf-info-drawer>
+          <adf-info-drawer-tab label="Tasks Overview">
+            <adf-analytics
+                [reportId]="tasksOverviewReportId">
+            </adf-analytics>
+          </adf-info-drawer-tab>
+          <adf-info-drawer-tab label="Tasks SLA">
+            <adf-analytics
+                [reportId]="tasksSLAReportId">
+            </adf-analytics>
+          </adf-info-drawer-tab>
+          <adf-info-drawer-tab label="Instances Overview">
+            <adf-analytics
+                [reportId]="instancesOverviewReportId">
+            </adf-analytics>
+          </adf-info-drawer-tab>
+            <adf-info-drawer-tab label="Heat Map">
+            <adf-analytics
+                [reportId]="heatMapReportId">
+            </adf-analytics>
+          </adf-info-drawer-tab>
+        </adf-info-drawer>
+  </mat-tab>
+  <mat-tab label="Procedures">
+      <adf-document-list
+        #documentList
+        [currentFolderId]="'-my-'"
+        [contextMenuActions]="true"
+        [contentActions]="true">
+      </adf-document-list>
+  </mat-tab>
+</mat-tab-group>
+
+
